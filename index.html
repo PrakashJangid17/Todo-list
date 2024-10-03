@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="stylesheet.css">
+</head>
+<body>
+    
+
+    <form>
+
+        <h1>Todo list</h1>
+        <div class="container">
+            <input type="text" class="todovalue" value="">
+            <button class="btn">Add List</button>
+        </div>
+        <div class="todolist"></div>
+    </form>
+
+    <script>
+         let todovalue = document.querySelector(".todovalue")
+        let todolist =document.querySelector(".todolist");
+        let todolistvalue =[];
+
+
+        const gettodolistLS = ()=>{
+            return JSON.parse(localStorage.getItem("todolist")) || [];
+        }
+
+        
+       const addTodoListLocalStorage = (todo) =>{
+        return localStorage.setItem("todolist", JSON.stringify(todo));
+       }
+       
+       const shotodolist=() =>{
+        todolistvalue =gettodolistLS();
+        todolistvalue.forEach((curdoto) => {
+            const liEvent = document.createElement("Li");
+         liEvent.innerHTML = curdoto;
+         todolist.appendChild(liEvent);    
+        });
+
+       }
+
+       removeTodoList = (e) =>{
+        //console.log(e.target.textContect)
+        let currentdoto = e.target;
+        console.log( todolistvalue);
+        updatedTodoList = todolistvalue.filter(
+            (curtodovalue)=>  curtodovalue !== currentdoto.textContent
+       
+    );
+    addTodoListLocalStorage( updatedTodoList );
+    currentdoto.remove();
+    console.log(updatedTodoList);
+       }
+
+
+       todolistvalue =gettodolistLS();
+        const addTodoList = (e) => {
+        e.preventDefault();
+        let newtodo = todovalue.value.trim();
+        todovalue.value ="";
+
+        if(newtodo.length !== 0 && ! todolistvalue.includes(newtodo) ){
+            todolistvalue .push(newtodo)
+            addTodoListLocalStorage( todolistvalue );
+        
+        //console.log("hallo prakash")
+         const liEvent = document.createElement("Li");
+         liEvent.innerHTML = newtodo;
+         todolist.appendChild(liEvent);
+        }
+
+
+        
+        };
+
+        shotodolist();
+
+        document.querySelector(".btn").addEventListener("click",(e) =>{
+            addTodoList(e);
+            
+        })
+
+         todolist.addEventListener("click",(e)=>removeTodoList(e)) ;  
+
+    </script>
+</body>
+</html>
